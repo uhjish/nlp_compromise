@@ -43,6 +43,8 @@ const corrections = function(r) {
 
   //past-tense copula
   r.match('has #Adverb? #Negative? #Adverb? been', true).tag('Copula');
+  //will have gone
+  r.match('will have not? #Adverb? #Adjective', true).last().tag('Verb');
 
   //he quickly foo
   r.match('#Noun #Adverb #Noun', true).term(2).tag('Verb', 'correction');

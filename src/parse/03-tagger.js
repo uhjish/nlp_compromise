@@ -1,31 +1,28 @@
 'use strict';
-const tg = require('./tagger');
-const step = tg.step;
-const lumper = tg.lumper;
-const contraction = tg.contraction;
+const step = require('./tagger');
 
-const tagger = function(ts) {
-  ts = step.punctuation_step(ts);
-  ts = lumper.lexicon_lump(ts);
-  ts = step.lexicon_step(ts);
-  ts = step.capital_step(ts);
-  ts = step.web_step(ts);
-  ts = step.suffix_step(ts);
-  ts = step.neighbour_step(ts);
-  ts = step.noun_fallback(ts);
-  ts = contraction.interpret(ts);
-  ts = step.date_step(ts);
-  ts = step.auxillary_step(ts);
-  ts = step.negation_step(ts);
-  // ts = step.adverb_step(ts);
-  ts = step.phrasal_step(ts);
-  ts = step.comma_step(ts);
-  //lump a couple times, for long ones
-  for (let i = 0; i < 3; i++) {
-    ts = lumper.lump_three(ts);
-    ts = lumper.lump_two(ts);
-  }
-  return ts;
+const tagger = function(r) {
+  r = step.punctuation_step(r);
+  // r = step.lexicon_lump(r);
+  // r = step.lexicon_step(r);
+  // r = step.capital_step(r);
+  // r = step.web_step(r);
+  // r = step.suffix_step(r);
+  // r = step.neighbour_step(r);
+  // r = step.noun_fallback(r);
+  // r = contraction.interpret(r);
+  // r = step.date_step(r);
+  // r = step.auxillary_step(r);
+  // r = step.negation_step(r);
+  // // r = step.adverb_step(r);
+  // r = step.phrasal_step(r);
+  // r = step.comma_step(r);
+  // //lump a couple times, for long ones
+  // for (let i = 0; i < 3; i++) {
+  //   r = step.lump_three(r);
+  //   r = step.lump_two(r);
+  // }
+  return r;
 };
 
 module.exports = tagger;

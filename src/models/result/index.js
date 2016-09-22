@@ -1,7 +1,4 @@
 'use strict';
-const inspect = require('./inspect');
-const render = require('./render');
-const normalize = require('./normalize');
 const methods = require('./methods');
 
 //a result is an array of termLists
@@ -13,19 +10,32 @@ class Result {
   get found() {
     return this.list.length > 0;
   }
+  verbs() {
+    return this.match('#VerbPhrase+');
+  }
 }
-
 //add methods to prototype
 Object.keys(methods).forEach((k) => {
   Result = methods[k](Result);
 });
 /** return ad-hoc data about this result*/
-Result.prototype.inspect = inspect;
-/** different presentation logic for this result*/
-Result.prototype.render = render;
-/** fixup transforms*/
-Result.prototype.normalize = normalize;
+Result.prototype.info = require('./inspect');
+// /** different presentation logic for this result*/
+// Result.prototype.render = require('./render');
+// Result.prototype.check = require('./render/check');
+// /** fixup transforms*/
+// Result.prototype.normalize = require('./normalize');
 
+// const Verbs = require('./verbs')(Result);
+// function() {
+// let list = this.match('#VerbPhrase+').list;
+// return new Verbs(list, this.context);
+// };
+
+// Result = require('./verbs')(Result);
+// Result.prototype.verbs = function() {
+//   return this.match('#VerbPhrase+');
+// };
 module.exports = Result;
 
 //apply methods

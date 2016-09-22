@@ -4,9 +4,6 @@ const normalize = require('./normalize');
 const fns = require('../../fns');
 const build_whitespace = require('./whitespace');
 
-const methods = require('./methods');
-methods.render = require('./render');
-
 class Term {
   constructor(str, context) {
     this.text = fns.ensureString(str);
@@ -17,7 +14,6 @@ class Term {
     // this.endPunct = this.endPunctuation();
     this.normal = normalize(this.text);
     this.silent_term = '';
-    this.helpers = require('./helpers');
   }
 
   set text(str) {
@@ -49,137 +45,9 @@ class Term {
     return str;
   }
 
-  /** delete this term from its sentence */
-  remove() {
-    let s = this.context.parent;
-    let index = this.info('index');
-    s.arr.splice(index, 1);
-    return s;
-  }
-
-  /** queries about this term with true or false answer */
-  is(str) {
-    if (this.tag[str]) {
-      return true;
-    }
-    str = str.toLowerCase();
-    if (methods.is[str]) {
-      return methods.is[str](this);
-    }
-    return false;
-  }
-
-  /** fetch ad-hoc information about this term */
-  info(str) {
-    str = str.toLowerCase();
-    if (methods.info[str]) {
-      return methods.info[str](this);
-    } else {
-      // console.log('missing \'info\' method ' + str);
-    }
-    return null;
-  }
-
-  /** find other terms related to this */
-  pluck(str) {
-    str = str.toLowerCase();
-    if (methods.pluck[str]) {
-      return methods.pluck[str](this);
-    } else {
-      console.warn('missing \'pluck\' method ' + str);
-    }
-    return null;
-  }
-
-  /** methods that change this term */
-  to(str) {
-    str = str.toLowerCase();
-    if (methods.transform[str]) {
-      return methods.transform[str](this);
-    } else {
-      console.warn('missing \'to\' method ' + str);
-    }
-    return null;
-  }
-
-  /** methods that change this term */
-  render(str) {
-    str = str.toLowerCase();
-    if (methods.render[str]) {
-      return methods.render[str](this);
-    } else {
-      console.warn('missing \'render\' method ' + str);
-    }
-    return null;
-  }
-
   /** set the term as this part-of-speech */
   tagAs(tag, reason) {
     set_tag(this, tag, reason);
-  }
-
-  /** get a list of words to the left of this one, in reversed order */
-  before(n) {
-    let terms = this.context.parent.arr;
-    //get terms before this
-    let index = this.info('index');
-    terms = terms.slice(0, index);
-    //reverse them
-    let reversed = [];
-    var len = terms.length;
-    for (let i = (len - 1); i !== 0; i--) {
-      reversed.push(terms[i]);
-    }
-    let end = terms.length;
-    if (n) {
-      end = n;
-    }
-    return reversed.slice(0, end);
-  }
-
-  /** get a list of words to the right of this one */
-  after(n) {
-    let terms = this.context.parent.arr;
-    let i = this.info('index') + 1;
-    let end = terms.length - 1;
-    if (n) {
-      end = i + n;
-    }
-    return terms.slice(i, end);
-  }
-  next() {
-    let terms = this.context.parent.arr;
-    let i = this.info('index') + 1;
-    return terms[i];
-  }
-
-  /** add a word before this one*/
-  append(str) {
-    let term = this.helpers.makeTerm(str, this);
-    let index = this.info('Index');
-    let s = this.context.parent;
-    s.arr.splice(index, 0, term);
-    return s;
-  }
-  /** add a new word after this one*/
-  prepend(str) {
-    let term = this.helpers.makeTerm(str, this);
-    let index = this.info('Index');
-    let s = this.context.parent;
-    s.arr.splice(index + 1, 0, term);
-    return s;
-  }
-  /** replace this word with a new one*/
-  replace(str) {
-    let c = fns.copy(this.context);
-    let term = new Term(str, c);
-    term.whitespace.before = this.whitespace.before;
-    term.whitespace.after = this.whitespace.after;
-    term.endPunct = this.endPunct;
-    let index = this.info('Index');
-    let s = this.context.parent;
-    s.arr[index] = term;
-    return s;
   }
 
   /** make a copy with no references to the original  */
@@ -191,6 +59,18 @@ class Term {
     term.silent_term = this.silent_term;
     term.endPunct = this.endPunct;
     return term;
+  }
+  is(str) {
+    console.log('is-' + str);
+  }
+  info(str) {
+    console.log('info-' + str);
+  }
+  to(str) {
+    console.log('to-' + str);
+  }
+  render(str) {
+    console.log('render-' + str);
   }
 }
 

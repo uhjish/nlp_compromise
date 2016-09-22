@@ -2,7 +2,7 @@
 //a lexicon is a giant object of known words
 const data = require('./index');
 const fns = require('./fns');
-const Term = require('../models/term');
+const quickOne = require('../models/result/quickOne');
 
 let lexicon = {};
 
@@ -68,35 +68,34 @@ const wantVerbs = [
   'Adjective'
 ];
 data.verbs.forEach((v) => {
-  let t = new Term(v);
-  t.tag.Verb = true;
-  let o = t.info('conjugations') || {};
-  wantVerbs.forEach((k) => {
-    if (o[k] && !lexicon[o[k]]) {
-      lexicon[o[k]] = k;
-    }
-  });
+  let r = quickOne(v).tag('Verb');
+// let o = r.verbs().inspect();
+// wantVerbs.forEach((k) => {
+//   if (o[k] && !lexicon[o[k]]) {
+//     lexicon[o[k]] = k;
+//   }
+// });
 });
 
 //conjugate adjectives
 data.superlatives.forEach((a) => {
-  let t = new Term(a);
-  t.tag.Adjective = true;
-  let o = t.info('adjconjugations') || {};
-  Object.keys(o).forEach((k) => {
-    if (o[k] && !lexicon[o[k]]) {
-      lexicon[o[k]] = k;
-    }
-  });
+  // let t = new Term(a);
+  // t.tag.Adjective = true;
+  // let o = t.info('adjconjugations') || {};
+  // Object.keys(o).forEach((k) => {
+  //   if (o[k] && !lexicon[o[k]]) {
+  //     lexicon[o[k]] = k;
+  //   }
+  // });
 });
 
 //inflect nouns
 data.nouns.forEach((n) => {
   lexicon[n] = 'Singular';
-  let t = new Term(n);
-  t.tag.Noun = true;
-  let plural = t.info('plural');
-  lexicon[plural] = 'Plural';
+// let t = new Term(n);
+// t.tag.Noun = true;
+// let plural = t.info('plural');
+// lexicon[plural] = 'Plural';
 });
 
 //let a rip.

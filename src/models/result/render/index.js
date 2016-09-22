@@ -17,7 +17,7 @@ const methods = {
       str += ts.normal();
       return str;
     }, '');
-  },
+  }
 };
 
 //

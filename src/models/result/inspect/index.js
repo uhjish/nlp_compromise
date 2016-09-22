@@ -1,23 +1,29 @@
 'use strict';
+// const defaultObj = {
+//   numbers: true,
+// };
 //
 const methods = {
-  number: (m) => {
+  numbers: (m) => {
     return m.match('#Value').clone().toNumber().render('array').map((str) => {
       return parseInt(str, 10);
     });
   },
-  nicenumber: (m) => {
-    return m.match('#Value').clone().toNiceNumber().render('array');
+  people: (m) => {
+    return m.match('#Person').normal();
   }
 };
 
-const info = function(method) {
-  let result = this;
-  method = method.toLowerCase();
-  if (methods[method]) {
-    return methods[method](result);
-  }
-  return [];
+const inspect = function(obj) {
+  let self = this;
+  obj = obj || methods;
+  let all = {};
+  Object.keys(obj).forEach((k) => {
+    if (methods[k]) {
+      all[k] = methods[k](self);
+    }
+  });
+  return all;
 };
 
-module.exports = info;
+module.exports = inspect;

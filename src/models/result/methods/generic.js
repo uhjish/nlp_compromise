@@ -1,7 +1,5 @@
 'use strict';
-const Term = require('../../term');
-const Terms = require('../terms');
-
+const Terms = require('../../terms');
 
 const genericMethods = (Result) => {
 
